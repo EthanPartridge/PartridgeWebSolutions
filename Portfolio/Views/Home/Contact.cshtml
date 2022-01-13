@@ -1,0 +1,87 @@
+﻿@model Portfolio.Models.FormModel
+@{ 
+    ViewData["Title"] = "Contact";
+}
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #3577DA;
+        }
+
+        .background-image {
+            background-image: url(../Images/portfolio_background_compressed.svg);
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            height: 100%;
+            width: 100vw;
+            background-repeat: no-repeat;
+            z-index: -1;
+        }
+    </style>
+    <meta name="author" content="Ethan Partridge" />
+    <meta name="description" content="Contact Ethan Partridge via the contact form or contact info provided for any full-stack developer ASP.NET Core C# business needs." />
+    <meta name="keywords" content="contact, full-stack developer, fullstack developer, web developer, C#, ASP.NET Core, Ethan Partridge, LinkedIn, GitHub, email, phone number, CSharp, DotNet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+    <div class="blurred-background"></div>
+    <div class="background-image"></div>
+    <div class="header-spacer"></div>
+
+    <div class="contact-page-container contact-page-container-adjusted animated-body">
+        <section class="contact-section-container contact-section-container-left">
+            <h2>My Contact Info</h2>
+            <div class="my-contact-info-container">
+                <div class="my-contact-info">
+                    <img src="~/Images/carbon_email.svg" alt="Email" />
+                    <p>ethanpart98@gmail.com</p>
+                </div>
+                <div class="my-contact-info">
+                    <img src="~/Images/akar-icons_phone.svg" alt="Phone Number" />
+                    <p>618-841-1204</p>
+                </div>
+                <div class="my-contact-info">
+                    <img src="~/Images/cib_github.svg" alt="GitHub" />
+                    <a class="contact-link" href="https://github.com/EthanPartridge" target="_blank">https://github.com/EthanPartridge</a>
+                </div>
+                <div class="my-contact-info">
+                    <img src="~/Images/bi_linkedin.svg" alt="LinkedIn" />
+                    <a class="contact-link" href="https://linkedin.com/in/ethanpartridge2021/" target="_blank">https://linkedin.com/in/ethanpartridge2021/</a>
+                </div>
+            </div>
+        </section>
+
+        <form class="contact-section-container contact-section-container-right" method="post" asp-action="Message" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <h2>Contact Form</h2>
+            <div class="text-input-container">
+                <label for="contact-page-name-input">
+                    Name*
+                    <strong><span asp-validation-for="Name" id="name-error"></span></strong>
+                </label>
+                <input id="contact-page-name-input" type="text" name="name" aria-describedby="name-error" asp-for="Name"/>
+            </div>
+            <div class="text-input-container">
+                <label for="contact-page-email-input">
+                    Email*
+                    <strong><span asp-validation-for="Email" id="email-error"></span></strong>
+                </label>
+                <input id="contact-page-email-input" type="email" name="email" aria-describedby="email-error" asp-for="Email"/>
+            </div>
+            <div class="textarea-input-container">
+                <label for="contact-page-message-input">
+                    Message*
+                    <strong><span asp-validation-for="Message" id="message-error"></span></strong>
+                </label>
+                <textarea id="contact-page-message-input" name="message" aria-describedby="message-error" asp-for="Message"></textarea>
+                <input class="password" type="text" name="password" tabindex="-1" autocomplete="off" asp-for="Password"/>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</body>

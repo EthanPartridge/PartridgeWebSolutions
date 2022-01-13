@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollToPlugin.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    @await Html.PartialAsync("_Favicons")
+</head>
+<body>
+    <header id="header-container">
+        <div class="top-navbar-container">
+            <a class="header-logo" asp-controller="Home" asp-action="Index"><h1>Ethan Partridge</h1></a>
+            <nav class="top-navbar">
+                <a href="#" class="menu-toggle-button"><img src="~/Images/Menu Button.svg" alt="Menu Toggle Button" /></a>
+                <div class="nav-link-and-decorative-rectangle-container">
+                    <div class="nav-link-container">
+                        <button class="menu-exit-button">
+                            <img class="menu-exit-button-image" src="~/Images/X Icon.svg" alt="Exit Menu Button" />
+                        </button>
+                        <ul class="nav-links">
+                            <li>
+                                <a asp-controller="Home" asp-action="Index" class="home-link-a">Home</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Home" asp-action="Resume">Resume</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Home" asp-action="Contact">Contact</a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/EthanPartridge" target="_blank" rel="noopener noreferrer">GitHub <img src="~/Images/fa-solid_external-link-alt.svg" alt="External Link" /></a>
+
+                            </li>
+                            <li>
+                                <a href="https://linkedin.com/in/ethanpartridge2021/" target="_blank" rel="noopener noreferrer">LinkedIn <img src="~/Images/fa-solid_external-link-alt.svg" alt="External Link" /></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <img class="menu-decorative-rectangle" src="~/Images/Rectangle 22.svg" alt="Menu Decorative Rectangle" />
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div>
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

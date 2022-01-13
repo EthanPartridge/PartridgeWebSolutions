@@ -1,0 +1,16 @@
+﻿@{ 
+    ViewData["Title"] = "Message Confirmation";
+}
+
+<body class="message-confirmation-body">
+    <div class="message-confirmation-container">
+        <div class="header-spacer"></div>
+        <p>Your message has been sent successfully. You will be redirected shortly.</p>
+    </div>
+</body>
+
+<script type="text/javascript">
+    window.setTimeout(function () {
+        window.location.href = '@Url.Action("Index", "Home")';
+    }, 4000);
+</script>

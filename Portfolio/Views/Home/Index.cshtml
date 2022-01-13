@@ -1,0 +1,407 @@
+﻿@model Portfolio.ViewModels.IndexViewModel
+@{
+    ViewData["Title"] = "Home";
+
+    //Format crypto data to display it properly
+    var prices = ViewData.Model.CryptoPriceChartData.Prices;
+    var market = ViewData.Model.CryptoMarketData.MarketData;
+    List<long> unixTimeFromController = new List<long>();
+    List<decimal> priceFromController = new List<decimal>();
+    List<string> marketDataFromController = new List<string>();
+    for (int i = 0; i < prices.GetLength(0); i++)
+    {
+        unixTimeFromController.Add(Convert.ToInt64(prices[i, 0]));
+        priceFromController.Add(Convert.ToDecimal(prices[i, 1]));
+    }
+
+    marketDataFromController.Add("marketCapRank:" + market.MarketCapRank);
+    marketDataFromController.Add("marketCap:" + market.MarketCap.Usd);
+    marketDataFromController.Add("totalVolume:" + market.TotalVolume.Usd);
+    marketDataFromController.Add("circulatingSupply:" + market.CirculatingSupply);
+    marketDataFromController.Add("totalSupply:" + market.TotalSupply);
+
+    var unixTimeArrayFromController = unixTimeFromController.ToArray();
+    var priceArrayFromController = priceFromController.ToArray();
+    var marketDataArrayFromController = marketDataFromController.ToArray();
+}
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highstock/6.0.3/highstock.js" integrity="sha512-xStuxZIFeepdcpLwBhqIuU761mDfYUDbV8C8lUiTX96W+kyL+AYmY9l3o/Ku30gEek9l+hUJGQpmT4pcVm6LeA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        
+        body {
+            background-color: #3577DA;
+        }
+        
+        .background-image {
+            background-image: url(../Images/portfolio_background_compressed.svg);
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            height: 100%;
+            width: 100vw;
+            background-repeat: no-repeat;
+            z-index: -1;
+            transform: scaleX(-1);
+        }
+        
+    </style>
+    <meta name="author" content="Ethan Partridge" />
+    <meta name="description" content="Full-stack web developer portfolio for Ethan Partridge. My primary technologies include the Microsoft stack (ASP.NET Core MVC, Entity Framework, Microsoft SQL Server, Azure, C#). I provide skills such as API integration, database manipulation, SEO optimization, and more." />
+    <meta name="keywords" content="portfolio, full-stack developer, fullstack developer, web developer, C#, ASP.NET Core, API, Database, CRUD, Entity Framework, Microsoft SQL Server, Azure, Ethan Partridge, LinkedIn, GitHub, email, phone number, CSharp, DotNet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+    <div class="blurred-background"></div>
+    <div class="background-image"></div>
+        <section class="landing-page-content landing-section">
+            <div class="header-spacer"></div>
+
+            <p class="slogan">Providing web<br />solutions for <span>you</span>.</p>
+            <img class="landing-section-img ls-img-right" src="~/Images/undraw_mobile_payments_re_7udl 1.svg" alt="Mobile Payment" id="landing-section-right-img" />
+            <img class="landing-section-img ls-img-left" src="~/Images/undraw_thought_process_re_om58 1.svg" alt="Thought Process" />
+            <div class="job-title-container">
+                <h1>Ethan Partridge</h1>
+                <h2>Full Stack Developer</h2>
+            </div>
+            <div class="scroll-to-see-more-container">
+                <p>Scroll to see more</p>
+                <img class="arrow-button-img" src="~/Images/fe_arrow-down-yellow.svg" alt="Down Arrow" />
+            </div>
+        </section>
+
+        <section class="landing-page-content scroll-one">
+            <img src="~/Images/avataaars 1.svg" alt="Ethan's Avatar" class="avatar-img"/>
+            <p class="intro-paragraph">Hi! I’m <strong>Ethan Partridge</strong>. I love using technology to solve problems. I graduated this past May with a <strong>B.S. in Computer Science</strong> from the University of Southern Indiana. I’ve been learning <strong>Full-Stack Development</strong> for over a year. I’m <strong>passionate</strong> about web development and <strong>excited to grow</strong> as a developer. Please feel free to <a asp-controller="Home" asp-action="Contact">contact me</a>. I look forward to hearing from you! <strong class="scroll-one-cta">Continue scrolling</strong> to see some of the skills I can provide.</p>
+            <img class="arrow-button-img" src="~/Images/fe_arrow-down-yellow.svg" alt="Down Arrow"/>
+        </section>
+
+        <section class="landing-page-content scroll-two">
+            <h3>API Integration</h3>
+            <div class="scroll-two-left-col">
+                <div class="crypto-chart-market-data">
+                    <div class="market-cap-container">
+                        <p>Market Cap</p>
+                        <p id="market-cap"></p>
+                    </div>
+                    <div class="market-cap-rank-container">
+                        <p>Market Cap Rank</p>
+                        <p id="market-cap-rank"></p>
+                    </div>
+                    <div class="trading-volume-container">
+                        <p>Trading Volume (24hr)</p>
+                        <p id="trading-volume"></p>
+                    </div>
+                    <div class="circulating-supply-container">
+                        <p>Circulating Supply</p>
+                        <p id="circulating-supply"></p>
+                    </div>
+                    <div class="total-supply-container">
+                        <p>Total Supply</p>
+                        <p id="total-supply"></p>
+                    </div>
+                    <div class="percentage-of-total-supply-container">
+                        <p>% of Total Supply</p>
+                        <p id="percentage-of-total-supply"></p>
+                    </div>
+                </div>
+                <i>*Time is relative to UTC</i>
+                <div id="myChart"></div>
+
+            </div>
+            <div class="scroll-two-right-col">
+                <p>By requesting data from the <em>CoinGecko API</em> on the server-side, real time prices are shown for Bitcoin. The chart and market information update every minute with fresh data. I achieved this by implementing a Background Task to request data from the CoinGecko API at one minute intervals. A <em>SignalR Hub</em> creates an open connection between the server and the client to enable the client to receive data without having to refresh the browser.</p>
+                <br />
+                <p>On the client-side, I'm using the <em>Highcharts Stock API</em> to display all the data gathered from the CoinGecko API. The <em>following slide</em> about database manipulation utilizes the <em>SwiperJS API</em> to create and animate the image carousel.</p>
+            </div>
+            <div class="scroll-two-button-container">
+                <img class="arrow-button-img" src="~/Images/fe_arrow-down-blue.svg" alt="Down Arrow" />
+            </div>
+        </section>
+
+        <section class="landing-page-content scroll-three">
+            <h3>Database Manipulation</h3>
+            <div class="scroll-three-text-container">
+                <p>Here are some screenshots of my first full-stack application, Kickit Habit Tracker. Using the Microsoft stack (ASP.NET MVC, Entity Framework, and MS SQL Server), I designed and implemented a full-stack web application, which is hosted on Azure.</p>
+                <br />
+                <p>Kickit uses CRUD operations to manage and track all user’s habits. Click <a href="https://kickithabittracker.com/" target="_blank">here<img src="~/Images/fa-solid_external-link-alt-yellow.svg" alt="External Link" /></a> to check out the web application or type <span>KickitHabitTracker.com</span> into your browser.</p>
+            </div>
+            <div class="swiper-container">
+                <div class="swiper">
+                    <!-- Additional required wrapper -->
+                    <div class="swiper-wrapper">
+                        <!-- Slides -->
+                        <div class="swiper-slide">
+                            <div class="swiper-zoom-container">
+                                <img class="kickit-image" src="~/Images/Home-Page-min.PNG" alt="Kickit Habit Tracker - Home Page" />
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="swiper-zoom-container">
+                                <img class="kickit-image" src="~/Images/Add-Page-min.PNG" alt="Kickit Habit Tracker - Add Habit Page" />
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="swiper-zoom-container">
+                                <img class="kickit-image" src="~/Images/Update-Habit-min.PNG" alt="Kickit Habit Tracker - Update Habit Page" />
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="swiper-zoom-container">
+                                <img class="kickit-image" src="~/Images/Delete-Page-min.PNG" alt="Kickit Habit Tracker - Delete Habit Page" />
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="swiper-zoom-container">
+                                <img class="kickit-image" src="~/Images/Habit-Page-min.PNG" alt="Kickit Habit Tracker - Habit List Page" />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- If we need pagination -->
+                    <div class="swiper-pagination"></div>
+                    <!-- If we need navigation buttons -->
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+            </div>
+            <div class="scroll-three-logo-and-instructions-container">
+                <div class="kickit-logo-container">
+                    <img class="kickit-logo" src="~/Images/kickit-logo.svg" alt="Kickit Logo" />
+                    <p class="kickit-logo-text"><span class="kickit-k">K</span><span class="kickit-i">i</span><span class="kickit-ckit">ckit</span></p>
+                </div>
+                <div class="scroll-three-instruction">
+                    <p>Double click or pinch an image to zoom</p>
+                    <img src="~/Images/akar-icons_arrow-back.svg" alt=" Down Arrow" />
+                </div>
+            </div>
+            <div class="scroll-three-button-container">
+                <img class="arrow-button-img" src="~/Images/fe_arrow-down-yellow.svg" alt="Down Arrow" />
+            </div>
+        </section>
+
+        <section class="landing-page-content scroll-four">
+            <h3>SEO Optimization</h3>
+            <div class="scroll-four-left-col">
+                <img class="scroll-four-img" src="~/Images/undraw_browsing_re_eycn_blue.svg" alt="Website HTML" />
+            </div>
+            <div class="scroll-four-right-col">
+                <p>Developers have an integral role in SEO, which is why I have taken the time to learn SEO best practices and apply them.</p>
+                <br />
+                <p><em>Semantic HTML</em> is important for accessibility purposes and for search engines to easily understand your website’s content.</p>
+                <br />
+                <p>Details such as color contrast, mobile friendliness, and responsive will be optimized to enhance user experience, which will result in <em>longer Dwell Times</em>.</p>
+                <br />
+                <p>Social media and SERP presence is also important. I carefully consider if meta information is properly formatted to <em>increase Click Through Rates</em>.</p>
+            </div>
+            <div class="scroll-four-arrow">
+                <img class="arrow-button-img" src="~/Images/fe_arrow-down-blue.svg" alt="Down Arrow" />
+            </div>
+        </section>
+
+        <section class="landing-page-content scroll-five">
+            <h3>Contact Me!</h3>
+            <div class="contact-page-container">
+                <section class="contact-section-container contact-section-container-left">
+                    <h2>My Contact Info</h2>
+                    <div class="my-contact-info-container">
+                        <div class="my-contact-info">
+                            <img src="~/Images/carbon_email.svg" alt="Email" class="large-icons-contact" />
+                            <p>ethanpart98@gmail.com</p>
+                        </div>
+                        <div class="my-contact-info">
+                            <img src="~/Images/akar-icons_phone.svg" alt="Phone Number" class="large-icons-contact" />
+                            <p>618-841-1204</p>
+                        </div>
+                        <div class="my-contact-info">
+                            <img src="~/Images/cib_github.svg" alt="GitHub" class="small-icons-contact" />
+                            <a class="contact-link" href="https://github.com/EthanPartridge" target="_blank">https://github.com/EthanPartridge</a>
+                        </div>
+                        <div class="my-contact-info">
+                            <img src="~/Images/bi_linkedin.svg" alt="LinkedIn" class="small-icons-contact" />
+                            <a class="contact-link" href="https://linkedin.com/in/ethanpartridge2021/" target="_blank">https://linkedin.com/in/ethanpartridge2021/</a>
+                        </div>
+                    </div>
+                </section>
+
+                <form class="contact-section-container contact-section-container-right" method="post" asp-action="Message" autocomplete="off">
+                    @Html.AntiForgeryToken()
+                    <h2>Contact Form</h2>
+                    <div class="text-input-container">
+                        <label for="contact-page-name-input">
+                            Name*
+                            <strong><span asp-validation-for="Form.Name" id="name-error"></span></strong>
+                        </label>
+                        <input id="contact-page-name-input" type="text" name="name" aria-describedby="name-error" asp-for="Form.Name" />
+                    </div>
+                    <div class="text-input-container">
+                        <label for="contact-page-email-input">
+                            Email*
+                            <strong><span asp-validation-for="Form.Email" id="email-error"></span></strong>
+                        </label>
+                        <input id="contact-page-email-input" type="email" name="email" aria-describedby="email-error" asp-for="Form.Email" />
+                    </div>
+                    <div class="textarea-input-container">
+                        <label for="contact-page-message-input">
+                            Message*
+                            <strong><span asp-validation-for="Form.Message" id="message-error"></span></strong>
+                        </label>
+                        <textarea id="contact-page-message-input" type="text" name="message" aria-describedby="message-error" asp-for="Form.Message"></textarea>
+                        <input class="password" type="text" name="password" tabindex="-1" autocomplete="off" asp-for="Form.Password" />
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+            <a id="return-to-top-button" href="#">Return to top</a>
+        </section>
+</body>
+
+@section Scripts {
+    <script src="~/lib/aspnet/signalr/dist/browser/signalr.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+        //Formatting crypto data to display it properly
+        var tempUnixArray = new Array();
+        var tempPriceArray = new Array();
+        var tempMarketArray = new Array();
+        @foreach (var u in unixTimeArrayFromController)
+        {
+            @:tempUnixArray.push("@u");
+        }
+
+        @foreach (var p in priceArrayFromController)
+        {
+            @:tempPriceArray.push("@p");
+        }
+
+        @foreach (var m in marketDataFromController)
+        {
+            @:tempMarketArray.push("@m");
+        }
+
+        var formattedDataArrayFromController = new Array();
+        for (var i = 0; i < tempUnixArray.length - 1; i++) {
+            formattedDataArrayFromController.push([JSON.parse(tempUnixArray[i]), JSON.parse(tempPriceArray[i])]);
+        }
+
+        var marketDataObjectFromController = new Array();
+        for (var i = 0; i < tempMarketArray.length; i++) {
+            var split = tempMarketArray[i].split(':');
+            marketDataObjectFromController[split[0].trim()] = split[1].trim();
+        }
+
+        var percentageOfTotalSupply = (Number(marketDataObjectFromController['circulatingSupply']) / Number(marketDataObjectFromController['totalSupply'])) * 100;
+
+        $("#market-cap").html("$" + marketDataObjectFromController['marketCap']);
+        $("#market-cap-rank").html(marketDataObjectFromController['marketCapRank']);
+        $("#trading-volume").html("$" + marketDataObjectFromController['totalVolume']);
+        $("#circulating-supply").html(marketDataObjectFromController['circulatingSupply']);
+        $("#total-supply").html(marketDataObjectFromController['totalSupply']);
+        $("#percentage-of-total-supply").html(percentageOfTotalSupply.toFixed(3) + "%");
+
+        //Initialize HighChart API
+        Highcharts.stockChart('myChart', {
+            title: {
+                text: 'Bitcoin Price',
+                style: {
+                    fontWeight: '600',
+                    color: '#0033AD'
+                }
+            },
+            series: [{
+                name: 'Price',
+                data: formattedDataArrayFromController,
+                tooltip: {
+                    valueDecimals: 2
+                },
+                relativeXValue: true,
+                color: '#3577DA'
+            }],
+            rangeSelector: {
+                enabled: false
+            },
+            xAxis: {
+                labels: {
+                    formatter: function () {
+                        return Highcharts.dateFormat('%H:%M', this.value);
+                    }
+                }
+            },
+            credits: {
+                enabled: true,
+                text: 'Highcharts',
+                href: 'javascript:window.open("https://www.highcharts.com/", "_blank")'
+            }
+        });
+
+        //Initialize SignalR to update crypto data with fresh data from CoinGecko API
+        var connection = new signalR.HubConnectionBuilder().withUrl("/hub").build();
+        connection.on("CryptoPriceUpdated", function (unixTimeArray, priceArray, cryptoMarketDataArray) {
+
+            var formattedPriceDataArray = new Array();
+            for (var i = 0; i < unixTimeArray.length - 1; i++) {
+                formattedPriceDataArray.push([JSON.parse(unixTimeArray[i]), priceArray[i]]);
+            }
+
+            var marketDataObject = new Array();
+            for (var i = 0; i < cryptoMarketDataArray.length; i++) {
+                var split = cryptoMarketDataArray[i].split(':');
+                marketDataObject[split[0].trim()] = split[1].trim();
+            }
+
+            var percentageOfTotalSupply = (Number(marketDataObject['circulatingSupply']) / Number(marketDataObject['totalSupply'])) * 100;
+
+            $("#market-cap").html("$" + marketDataObject['marketCap']);
+            $("#market-cap-rank").html(marketDataObject['marketCapRank']);
+            $("#trading-volume").html("$" + marketDataObject['totalVolume']);
+            $("#circulating-supply").html(marketDataObject['circulatingSupply']);
+            $("#total-supply").html(marketDataObject['totalSupply']);
+            $("#percentage-of-total-supply").html(percentageOfTotalSupply.toFixed(3) + "%");
+
+            //Reinitialize HighChart API
+            Highcharts.stockChart('myChart', {
+                title: {
+                    text: 'Bitcoin Price',
+                    style: {
+                        fontWeight: '600',
+                        color: '#0033AD'
+                    }
+                },
+                series: [{
+                    name: 'Price',
+                    data: formattedPriceDataArray,
+                    tooltip: {
+                        valueDecimals: 2
+                    },
+                    relativeXValue: true,
+                    color: '#3577DA'
+                }],
+                rangeSelector: {
+                    enabled: false
+                },
+                xAxis: {
+                    labels: {
+                        formatter: function () {
+                            return Highcharts.dateFormat('%H:%M', this.value);
+                        }
+                    }
+                },
+                credits: {
+                    enabled: true,
+                    text: 'Highcharts',
+                    href: 'javascript:window.open("https://www.highcharts.com/", "_blank")'
+                }
+            });
+
+            //Log date and time that crypto data was updated
+            var today = new Date();
+            var date = (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getFullYear();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTime = time + ' ' + date;
+            console.log("Crypto Data Updated at " + dateTime);
+        });
+        connection.start();
+    </script>
+}
